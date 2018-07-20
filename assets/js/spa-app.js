@@ -1,16 +1,10 @@
 'use strict';
 
-var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-} : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-};
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*!
-weForms - v1.2.8
-Generated: 2018-07-17 (1531815343485)
+weForms - v1.2.9
+Generated: 2018-07-20 (1532083990252)
 */
 
 ;(function ($) {
@@ -30,6 +24,7 @@ Generated: 2018-07-17 (1531815343485)
             return {
                 loading: false,
                 columns: [],
+                payment_form: '',
                 items: [],
                 ajaxAction: this.action,
                 nonce: weForms.nonce,
@@ -40,6 +35,7 @@ Generated: 2018-07-17 (1531815343485)
         created: function created() {
             this.fetchData();
         },
+
 
         computed: {
             columnLength: function columnLength() {
@@ -65,6 +61,7 @@ Generated: 2018-07-17 (1531815343485)
                         self.columns = response.columns;
                         self.items = response.entries;
                         self.form_title = response.form_title;
+                        self.payment_form = response.payment_form;
                         self.totalItems = response.pagination.total;
                         self.perPage = response.pagination.per_page;
                         self.totalPage = response.pagination.pages;

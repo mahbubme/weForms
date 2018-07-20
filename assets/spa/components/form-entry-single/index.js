@@ -14,7 +14,7 @@ weForms.routeComponents.FormEntriesSingle = {
             },
             form_settings: {},
             respondent_points: 0,
-            answers: {}, 
+            answers: {},
         };
     },
     created: function() {

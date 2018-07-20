@@ -1132,3 +1132,34 @@ function weforms_get_pain_text( $value ) {
 
     return $value;
 }
+
+/**
+ * check if the form's payment option is enabled
+ *
+ * @since 1.3.0
+ *
+ * @param $form_id form id
+ *
+ * @return boolean
+ **/
+function weforms_is_payment_enabled( $form_id ) {
+    if ( !$form_id ) {
+        return;
+    }
+
+    if ( !function_exists( 'weforms_pro' ) ) {
+        return;
+    }
+
+    if ( !weforms_pro_is_module_active( 'payment/payment.php' ) ) {
+        return;
+    }
+
+    $form           = weforms()->form->get( $form_id );
+    $form_settings  = $form->get_settings();
+
+    if ( $form_settings['payment_stripe_deactivate'] != 1 || $form_settings['payment_paypal_deactivate'] != 1 ) {
+        return true;
+    }
+    return;
+}

@@ -13,6 +13,7 @@ Vue.component( 'wpuf-table', {
         return {
             loading: false,
             columns: [],
+            payment_form: '',
             items: [],
             ajaxAction: this.action,
             nonce: weForms.nonce,
@@ -45,13 +46,14 @@ Vue.component( 'wpuf-table', {
                     _wpnonce: weForms.nonce
                 },
                 success: function(response) {
-                    self.loading = false;
-                    self.columns = response.columns;
-                    self.items   = response.entries;
-                    self.form_title = response.form_title;
-                    self.totalItems = response.pagination.total;
-                    self.perPage    = response.pagination.per_page;
-                    self.totalPage  = response.pagination.pages;
+                    self.loading        = false;
+                    self.columns        = response.columns;
+                    self.items          = response.entries;
+                    self.form_title     = response.form_title;
+                    self.payment_form   = response.payment_form;
+                    self.totalItems     = response.pagination.total;
+                    self.perPage        = response.pagination.per_page;
+                    self.totalPage      = response.pagination.pages;
 
                     self.$emit('ajaxsuccess', response);
                 },

@@ -53,7 +53,8 @@
                 </td>
                 <th class="col-entry-id"><?php _e( 'ID', 'weforms' ); ?></th>
                 <th v-for="(header, index) in columns">{{ header }}</th>
-                <th>Actions</th>
+                <th class="col-entry-details"><?php _e( 'Actions', 'weforms' ); ?></th>
+                <th v-if="payment_form == 'yes'"><?php _e( 'Payment Status', 'weforms' ); ?></th>
             </tr>
         </thead>
         <tfoot>
@@ -64,6 +65,7 @@
                 <th class="col-entry-id"><?php _e( 'ID', 'weforms' ); ?></th>
                 <th v-for="(header, index) in columns">{{ header }}</th>
                 <th class="col-entry-details"><?php _e( 'Actions', 'weforms' ); ?></th>
+                <th v-if="payment_form == 'yes'"><?php _e( 'Payment Status', 'weforms' ); ?></th>
             </tr>
         </tfoot>
         <tbody>
@@ -95,6 +97,7 @@
                                 </router-link>
                             </template>
                         </th>
+                        <th v-if="payment_form == 'yes'">{{ entry.payment_status }}</th>
                     </template>
                 </template>
                 <template v-else>

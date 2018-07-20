@@ -400,11 +400,13 @@ class WeForms_Ajax {
 
         $this->check_admin();
 
-        $form_id      = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
-        $current_page = isset( $_REQUEST['page'] ) ? intval( $_REQUEST['page'] ) : 1;
-        $status       = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : 'publish';
-        $per_page     = 20;
-        $offset       = ( $current_page - 1 ) * $per_page;
+        $form_id        = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+        $form           = weforms()->form->get( $form_id );
+        $paymentEnabled = weforms_is_payment_enabled( $form_id );
+        $current_page   = isset( $_REQUEST['page'] ) ? intval( $_REQUEST['page'] ) : 1;
+        $status         = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : 'publish';
+        $per_page       = 20;
+        $offset         = ( $current_page - 1 ) * $per_page;
 
         if ( ! $form_id ) {
             wp_send_json_error( __( 'No form id provided!', 'weforms' ) );
@@ -417,6 +419,16 @@ class WeForms_Ajax {
 				'status' => $status,
             )
         );
+
+        // insert payment status if exist
+        foreach ($entries as $key => $value) {
+            $single_entry   = $form->entries()->get( $value->id );
+            $payment        = $single_entry->get_payment_data();
+
+            if ( !empty($payment) ) {
+                $value->payment_status = $payment->status;
+            }
+        }
 
         $columns       = weforms_get_entry_columns( $form_id );
         $total_entries = weforms_count_form_entries( $form_id, $status );
@@ -436,16 +448,17 @@ class WeForms_Ajax {
         $entries = apply_filters( 'weforms_get_entries', $entries, $form_id );
 
         $response = array(
-            'columns'    => $columns,
-            'entries'    => $entries,
-            'form_title' => get_post_field( 'post_title', $form_id ),
-            'pagination' => array(
-                'total'    => $total_entries,
-                'per_page' => $per_page,
-                'pages'    => ceil( $total_entries / $per_page ),
-                'current'  => $current_page
+            'columns'       => $columns,
+            'entries'       => $entries,
+            'form_title'    => get_post_field( 'post_title', $form_id ),
+            'payment_form'  => $paymentEnabled ? 'yes' : 'no',
+            'pagination'    => array(
+                    'total'    => $total_entries,
+                    'per_page' => $per_page,
+                    'pages'    => ceil( $total_entries / $per_page ),
+                    'current'  => $current_page
             ),
-            'meta' => array(
+            'meta'          => array(
                 'total'      => weforms_count_form_entries( $form_id ),
                 'totalTrash' => weforms_count_form_entries( $form_id, 'trash' ),
             ),
