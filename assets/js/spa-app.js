@@ -4,7 +4,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /*!
 weForms - v1.2.9
-Generated: 2018-07-20 (1532083990252)
+Generated: 2018-07-23 (1532346706464)
 */
 
 ;(function ($) {
@@ -142,6 +142,61 @@ Generated: 2018-07-20 (1532083990252)
                         }
                     });
                 }
+            },
+            filterBy: function filterBy() {
+                var self = this,
+                    filterBy = document.querySelector('select[name="weforms_entry_filter_by"]').value;
+                self.loading = true;
+
+                if ('-1' === filterBy) {
+                    self.loading = false;
+                    alert(wpuf_form_builder.i18n.filterByEmptyOption);
+                    return;
+                }
+
+                wp.ajax.send('weforms_form_entries', {
+                    data: {
+                        id: self.id,
+                        page: self.currentPage,
+                        status: self.status,
+                        filterby: filterBy,
+                        _wpnonce: weForms.nonce
+                    },
+                    success: function success(response) {
+                        self.loading = false;
+                        var entries = response.entries;
+
+                        if (entries.length !== 0) {
+                            self.entryFilter(filterBy, entries);
+                        }
+                    },
+                    error: function error(_error4) {
+                        self.loading = false;
+                        alert(_error4);
+                    }
+                });
+            },
+            entryFilter: function entryFilter(filterBy, entries) {
+                var filteredEntries = [];
+
+                switch (filterBy) {
+                    case 'payment_paid':
+                        filteredEntries = entries.filter(function (entry) {
+                            return entry.payment_status === 'completed';
+                        });
+                        break;
+                    case 'payment_unpaid':
+                        entries.forEach(function (entry) {
+                            if ('completed' !== entry.payment_status) {
+                                filteredEntries.push(entry);
+                            }
+                        });
+                        break;
+                    default:
+                        filteredEntries = this.items;
+                }
+
+                this.items = filteredEntries;
             }
         },
 
@@ -194,8 +249,8 @@ Generated: 2018-07-20 (1532083990252)
                             self.form_title = 'No entry found';
                         }
                     },
-                    error: function error(_error4) {
-                        alert(_error4);
+                    error: function error(_error5) {
+                        alert(_error5);
                     }
                 });
             }
@@ -392,8 +447,8 @@ Generated: 2018-07-20 (1532083990252)
                             self.$store.commit('set_form_integrations', response.integrations);
                         }
                     },
-                    error: function error(_error5) {
-                        alert(_error5);
+                    error: function error(_error6) {
+                        alert(_error6);
                     },
 
                     complete: function complete() {
@@ -628,9 +683,9 @@ Generated: 2018-07-20 (1532083990252)
                         self.respondent_points = response.respondent_points;
                         self.answers = response.answers;
                     },
-                    error: function error(_error6) {
+                    error: function error(_error7) {
                         self.loading = false;
-                        alert(_error6);
+                        alert(_error7);
                     }
                 });
             },
@@ -653,9 +708,9 @@ Generated: 2018-07-20 (1532083990252)
 
                         self.$router.push({ name: 'formEntries', params: { id: self.$route.params.id } });
                     },
-                    error: function error(_error7) {
+                    error: function error(_error8) {
                         self.loading = false;
-                        alert(_error7);
+                        alert(_error8);
                     }
                 });
             },
@@ -712,9 +767,9 @@ Generated: 2018-07-20 (1532083990252)
                         self.totalItems = response.meta.total;
                         self.totalPage = response.meta.pages;
                     },
-                    error: function error(_error8) {
+                    error: function error(_error9) {
                         self.loading = false;
-                        alert(_error8);
+                        alert(_error9);
                     }
                 });
             },
@@ -734,8 +789,8 @@ Generated: 2018-07-20 (1532083990252)
                             self.items.splice(index, 1);
                             self.loading = false;
                         },
-                        error: function error(_error9) {
-                            alert(_error9);
+                        error: function error(_error10) {
+                            alert(_error10);
                             self.loading = false;
                         }
                     });
@@ -756,8 +811,8 @@ Generated: 2018-07-20 (1532083990252)
                         self.items.splice(0, 0, response);
                         self.loading = false;
                     },
-                    error: function error(_error10) {
-                        alert(_error10);
+                    error: function error(_error11) {
+                        alert(_error11);
                         self.loading = false;
                     }
                 });
@@ -948,9 +1003,9 @@ Generated: 2018-07-20 (1532083990252)
                         self.loading = false;
                         self.forms = response;
                     },
-                    error: function error(_error11) {
+                    error: function error(_error12) {
                         self.loading = false;
-                        alert(_error11);
+                        alert(_error12);
                     }
                 });
             },
@@ -1018,8 +1073,8 @@ Generated: 2018-07-20 (1532083990252)
                         self.ximport.refs = response.refs;
                     },
 
-                    error: function error(_error12) {
-                        alert(_error12.message);
+                    error: function error(_error13) {
+                        alert(_error13.message);
                     },
 
                     complete: function complete() {
@@ -1046,8 +1101,8 @@ Generated: 2018-07-20 (1532083990252)
                         }
                     },
 
-                    error: function error(_error13) {
-                        alert(_error13);
+                    error: function error(_error14) {
+                        alert(_error14);
                     },
 
                     complete: function complete() {
@@ -1095,8 +1150,8 @@ Generated: 2018-07-20 (1532083990252)
                             self.no_transactions = true;
                         }
                     },
-                    error: function error(_error14) {
-                        alert(_error14);
+                    error: function error(_error15) {
+                        alert(_error15);
                     }
                 });
             }
@@ -1211,8 +1266,8 @@ Generated: 2018-07-20 (1532083990252)
                         toastr.success('Settings has been updated');
                     },
 
-                    error: function error(_error15) {
-                        console.log(_error15);
+                    error: function error(_error16) {
+                        console.log(_error16);
                     },
 
                     complete: function complete() {
@@ -1233,8 +1288,8 @@ Generated: 2018-07-20 (1532083990252)
                         _success(response);
                     },
 
-                    error: function error(_error16) {
-                        console.log(_error16);
+                    error: function error(_error17) {
+                        console.log(_error17);
                     },
 
                     complete: function complete() {}

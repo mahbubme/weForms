@@ -131,6 +131,59 @@ Vue.component( 'wpuf-table', {
                     }
                 });
             }
+        },
+        filterBy: function() {
+            var self            = this,
+                filterBy        = document.querySelector('select[name="weforms_entry_filter_by"]').value;
+                self.loading    = true;
+
+            if ( '-1' === filterBy ) {
+                self.loading = false;
+                alert( wpuf_form_builder.i18n.filterByEmptyOption );
+                return;
+            }
+
+            wp.ajax.send( 'weforms_form_entries', {
+                data: {
+                    id: self.id,
+                    page: self.currentPage,
+                    status: self.status,
+                    filterby: filterBy,
+                    _wpnonce: weForms.nonce
+                },
+                success: function(response) {
+                    self.loading = false;
+                    var entries = response.entries;
+
+                    if ( entries.length !== 0 ) {
+                        self.entryFilter( filterBy, entries );
+                    }
+                },
+                error: function(error) {
+                    self.loading = false;
+                    alert(error);
+                }
+            });
+        },
+        entryFilter: function( filterBy, entries ) {
+            var filteredEntries = [];
+
+            switch (filterBy) {
+              case 'payment_paid':
+                filteredEntries = entries.filter( entry => entry.payment_status === 'completed' );
+                break;
+              case 'payment_unpaid':
+                entries.forEach(function(entry){
+                    if ( 'completed' !== entry.payment_status ) {
+                        filteredEntries.push(entry);
+                    }
+                });
+                break;
+              default:
+                filteredEntries = this.items;
+            }
+
+            this.items = filteredEntries;
         }
     },
 

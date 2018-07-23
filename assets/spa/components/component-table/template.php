@@ -22,6 +22,20 @@
             <a class="button" :href="'admin-post.php?action=weforms_export_form_entries&selected_forms=' + id + '&_wpnonce=' + nonce" style="margin-top: 0;"><span class="dashicons dashicons-download" style="margin-top: 4px;"></span> <?php _e( 'Export Entries', 'weforms' ); ?></a>
         </div>
 
+
+            <div class="alignleft actions">
+                <label for="weforms_entry_filter_by" style="float:left;font-size:14px;padding: 6px 14px"><?php _e( 'Filter By:', 'weforms' ); ?></label>
+                <select name="weforms_entry_filter_by">
+                    <option value="-1"><?php _e( '-- Select Option --', 'weforms' ); ?></option>
+                    <template v-if="payment_form === 'yes'">
+                        <option value="payment_paid"> <?php _e('Payment Paid', 'weforms'); ?></option>
+                        <option value="payment_unpaid"> <?php _e('Payment Unpaid', 'weforms'); ?></option>
+                    </template>
+                </select>
+
+                <button class="button action" v-on:click.prevent="filterBy"><?php _e( 'Filter', 'weforms' ); ?></button>
+            </div>
+
         <div class="tablenav-pages">
 
             <span v-if="totalItems" class="displaying-num">{{ totalItems }} <?php _e( 'items', 'weforms' ); ?></span>
@@ -119,6 +133,7 @@
                             </router-link>
                         </template>
                     </th>
+                    <th v-if="payment_form == 'yes'">{{ entry.payment_status }}</th>
                 </template>
             </tr>
         </tbody>

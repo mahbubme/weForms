@@ -405,6 +405,7 @@ class WeForms_Ajax {
         $paymentEnabled = weforms_is_payment_enabled( $form_id );
         $current_page   = isset( $_REQUEST['page'] ) ? intval( $_REQUEST['page'] ) : 1;
         $status         = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : 'publish';
+        $filterby       = isset( $_REQUEST['filterby'] ) ? $_REQUEST['filterby'] : '-1';
         $per_page       = 20;
         $offset         = ( $current_page - 1 ) * $per_page;
 

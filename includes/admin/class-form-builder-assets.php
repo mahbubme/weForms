@@ -305,6 +305,7 @@ class WeForms_Form_Builder_Assets {
             'shareYourFormText'     => __( "Anyone with this URL will be able to view and submit this form.", 'weforms' ),
             'areYouSure'            => __( 'Are you sure?', 'weforms' ),
             'selectNotification'    => __( 'You must select a notification', 'weforms' ),
+            'filterByEmptyOption'   => __( 'You must select a filter option', 'weforms' ),
             'areYouSureDesc'        => __( 'Anyone with existing URL won\'t be able to view and submit the form anymore.', 'weforms' ),
             'disableSharing'        => __( 'Disable Sharing', 'weforms' ),
 
